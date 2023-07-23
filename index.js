@@ -55,7 +55,7 @@ function nextSequence(){
 }
 
 $(".btn").on("click", function(){
-    if(firstTime == 0){
+    if(firstTime === 0){
         nextSequence();
         firstTime = 1;
     } else {
