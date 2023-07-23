@@ -55,7 +55,12 @@ function nextSequence(){
 }
 
 $(".btn").on("click", function(){
-    buttonClick(this.id);
+    if(fisrtTime == 0){
+        nextSequence();
+        firstTime = 1;
+    } else {
+        buttonClick(this.id);
+    }
 });
 
 function buttonClick(button){
