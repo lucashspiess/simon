@@ -1,20 +1,14 @@
 var gamePattern = [];
-
 var userClickedPattern = [];
-
 var btnColours = ["red", "blue", "green", "yellow"];
 
-var randomChosenColour;
-
-var firstTime = 0;
-
+var firstTime = true;
 var click = 0;
-
 var level = 0;
 
-function showChosenColor(){
-    $("#"+randomChosenColour).fadeOut(100).fadeIn(100);
-    makeSound(randomChosenColour); 
+function showChosenColor(colour){
+    $("#"+colour).fadeOut(100).fadeIn(100);
+    makeSound(colour); 
 }
 
 function checkAnswer(currentLevel){
@@ -40,27 +34,22 @@ function gameOver(){
     setTimeout(() => {
         $("body").toggleClass("game-over");
     }, 200);
-    firstTime = 0;
+    firstTime = true;
     level = 0;
     click = 0;
 }
 
 function nextSequence(){
-    randomChosenColour = btnColours[Math.floor(Math.random() * 4)];
+    var randomChosenColour = btnColours[Math.floor(Math.random() * 4)];
     level++;
     $("h1").text("Level "+level);
     gamePattern.push(randomChosenColour);
-    showChosenColor();
+    showChosenColor(randomChosenColour);
     userClickedPattern = [];
 }
 
 $(".btn").on("click", function(){
-    if(firstTime === 0){
-        nextSequence();
-        firstTime = 1;
-    } else {
-        buttonClick(this.id);
-    }
+    buttonClick(this.id);
 });
 
 function buttonClick(button){
@@ -71,27 +60,8 @@ function buttonClick(button){
 }
 
 function makeSound(color){
-    switch (color){
-        case "red":
-            var audio = new Audio("./sounds/red.mp3");
-            audio.play();
-            break;
-        case "yellow":
-            var audio = new Audio("./sounds/yellow.mp3");
-            audio.play();
-            break;
-        case "green":
-            var audio = new Audio("./sounds/green.mp3");
-            audio.play();
-            break;
-        case "blue":
-            var audio = new Audio("./sounds/blue.mp3");
-            audio.play();
-            break;
-        default:
-            var audio = new Audio("./sounds/wrong.mp3");
-            audio.play();
-    }
+    var audio = new Audio("./sounds/" + color + ".mp3");
+    audio.play();
 }
 
 function buttonAnimation(color){
@@ -102,23 +72,10 @@ function buttonAnimation(color){
 }
 
 document.addEventListener("keypress", function(evt){
-    if(firstTime === 0){
+    if(firstTime === true){
         nextSequence();
-        firstTime = 1;
+        firstTime = false;
     } else {
-        switch (evt.key){
-            case "a":
-                buttonClick("green");
-                break;
-            case "w":
-                buttonClick("red");
-                break;
-            case "s":
-                buttonClick("yellow");
-                break;
-            case "d":
-                buttonClick("blue");
-                break;
-        }
+        buttonClick(document.querySelector("." + evt.key).id);
     }
 })
